@@ -53,7 +53,7 @@
 static UTIL_TIMER_Object_t I2Csender;
 static UTIL_TIMER_Object_t I2Creciever;
 uint8_t RecievedData[6];
-uint8_t SendedData[2] = {0x24,0x00};
+uint8_t SendedData[2] = {0x24,0x00}; // Data to SHT30: 0x24 no clock stretching, 0x00 - Repeatability high
 
 uint16_t I2Ctransmitperiod = 1000;
 uint16_t I2Crecieveperiod= 15;
@@ -67,49 +67,50 @@ UTIL_SEQ_bm_t I2CRecieveHandler=1;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+
+//Received all data, print it in log
 void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	RecievedCtr++;
-}
-void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
-{
-	TransmitCtr++;
-}
-void SendI2C(void)
-{
-	HAL_I2C_Master_Transmit_IT(&hi2c2,  0x45<<1, SendedData, 2);
 
-
-	while(hi2c2.State ==HAL_I2C_STATE_BUSY_TX)
-	{
-
-	}
-	UTIL_TIMER_Start(&I2Creciever);
-}
-void RecieveI2C(void)
-{
-	HAL_I2C_Master_Receive_IT(&hi2c2,  0x45<<1, RecievedData, 6);
-	while(hi2c2.State ==HAL_I2C_STATE_BUSY_RX)
-	{
-
-	}
 	uint8_t i;
-	  char BuffCharSended[4];
-	  APP_LOG(TS_OFF, VLEVEL_L,  "I2C data: \n\r" );
+	char BuffCharSended[4];
 
+	RecievedCtr++; //interrup counter only for debug
 	  for(i=0; i < 6; i++)
 	  {
 		  itoa(RecievedData[i],BuffCharSended,10);
 		  APP_LOG(TS_OFF, VLEVEL_L,  " %s \n\r", BuffCharSended);
 	  }
 }
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	//if command sended start counting down to launch receiver task
+	TransmitCtr++;//interrup counter only for debug
+	UTIL_TIMER_Start(&I2Creciever);
+}
+
+//This taks send periodically command to SHT30 by I2C
+void SendI2C(void)
+{
+	// Send Data to SHT30 with interrupts
+	HAL_I2C_Master_Transmit_IT(&hi2c2,  0x45<<1, SendedData, 2);
+
+}
+void RecieveI2C(void)
+{
+	// send request for new data
+	HAL_I2C_Master_Receive_IT(&hi2c2,  0x45<<1, RecievedData, 6);
+
+}
 void SendI2CTimer(void)
 {
 	Flags=1;
+	//trigger sender task
 	  UTIL_SEQ_SetTask(1<<I2C_sender, I2C_senderPrio1);
 }
 void RecieveI2CTimer(void)
 {
+	//trigger reciever task
 	UTIL_SEQ_SetTask(1<<I2C_reciever, I2C_recieverPrio2);
 	Flags=2;
 	//UTIL_SEQ_SetTask(1<<I2CRecieveHandler, 0);
@@ -157,13 +158,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
   UTIL_SEQ_Init();
 
+  // create periodic timmer wich will triger Sending command to SHT30 by I2C
   UTIL_TIMER_Create(&I2Csender, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, SendI2CTimer, NULL);
   UTIL_TIMER_SetPeriod(&I2Csender, I2Ctransmitperiod);
   UTIL_TIMER_Start(&I2Csender);
 
 
+  //create task wich will wait for process recieved command by SHT30 from STM32 and ask for data
   UTIL_TIMER_Create(&I2Creciever, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, RecieveI2CTimer, NULL);
   UTIL_TIMER_SetPeriod(&I2Creciever, I2Crecieveperiod);
+
+  // Register tasks
   UTIL_SEQ_RegTask(1<<I2C_sender, 0, SendI2C);
   UTIL_SEQ_RegTask(1<<I2C_reciever,0,RecieveI2C);
   /* USER CODE END 2 */

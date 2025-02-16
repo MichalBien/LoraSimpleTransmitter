@@ -96,6 +96,8 @@ static void OnRxError(void);
 /* USER CODE END PFP */
 
 /* Exported functions ---------------------------------------------------------*/
+
+//Configure LoRa module and associated tasks
 void SubghzApp_Init(void)
 {
   /* USER CODE BEGIN SubghzApp_Init_1 */
@@ -130,6 +132,7 @@ void SubghzApp_Init(void)
 }
 
 /* USER CODE BEGIN EF */
+// Sending data by LoRa module
 static void TransmitPacket(void *context)
 {
 	uint8_t i =0;

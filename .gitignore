@@ -1,4 +1,7 @@
 .settings/
+
 *.cfg
 *.launch
 *.ld
+*.gitignore
+Debug/
