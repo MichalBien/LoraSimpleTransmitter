@@ -113,7 +113,7 @@ void RecieveI2CTimer(void)
 	//trigger reciever task
 	UTIL_SEQ_SetTask(1<<I2C_reciever, I2C_recieverPrio2);
 	Flags=2;
-	//UTIL_SEQ_SetTask(1<<I2CRecieveHandler, 0);
+
 }
 /* USER CODE END PFP */
 
