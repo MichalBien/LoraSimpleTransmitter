@@ -13,10 +13,12 @@
 <ol>
 <li>Development board Wio-E5 mini: Wio-E5 mini. This board includes the STM32WLE5JC, UART/USB-C converter, power supply, and antenna.</li>
 <li>SHT30 - Humidity and temperature sensor with I2C communication.</li>
-<li>5V USB power supply
-![transmitter](https://github.com/user-attachments/assets/2c8c0048-6a96-43db-87a3-5dd5a9af128e)
+<li>5V USB power supply<\li>
+      
+![transmitter](https://github.com/user-attachments/assets/3e30adec-44c9-4394-b10a-96336e7cf6a7)
+
 Fig.1 Hardware setup</li>
-![SHT30](https://github.com/user-attachments/assets/b0e5ca2f-bd72-4bc0-a654-9773dba139d7)
+![SHT30](https://github.com/user-attachments/assets/1931267f-aefa-4bc4-a122-5dbe46e12148)
 
 Fig.2 SHT30</p>
 
