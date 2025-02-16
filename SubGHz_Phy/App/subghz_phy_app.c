@@ -150,12 +150,6 @@ static void OnTxDone(void)
   /* USER CODE BEGIN OnTxDone */
 	  UTIL_TIMER_Start(&timerTransmit);  //Transmit packet in 2s
 	  uint8_t i;
-//	  char BuffCharSended[4];
-//	  for(i=0; i < bufferSize; i++)
-//	  {
-//		  itoa(Buffer[i],BuffCharSended,10);
-//		  APP_LOG(TS_OFF, VLEVEL_L,  "Wyslane dane: %s \n\r", BuffCharSended);
-//	  }
 
   /* USER CODE END OnTxDone */
 }

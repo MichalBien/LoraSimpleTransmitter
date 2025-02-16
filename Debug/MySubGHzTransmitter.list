@@ -37,11 +37,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  000212b1  00000000  00000000  0003d41d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0002b1b4  00000000  00000000  0005e6ce  2**0
+ 17 .debug_line   0002b1b2  00000000  00000000  0005e6ce  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000b4973  00000000  00000000  00089882  2**0
+ 18 .debug_str    000b4973  00000000  00000000  00089880  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  0013e1f5  2**0
+ 19 .comment      00000043  00000000  00000000  0013e1f3  2**0
                   CONTENTS, READONLY
  20 .debug_frame  00008a64  00000000  00000000  0013e238  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -33712,9 +33712,7 @@ static void OnTxDone(void)
 	  UTIL_TIMER_Start(&timerTransmit);  //Transmit packet in 2s
  800c298:	4802      	ldr	r0, [pc, #8]	@ (800c2a4 <OnTxDone+0x10>)
  800c29a:	f000 fe77 	bl	800cf8c <UTIL_TIMER_Start>
-//		  itoa(Buffer[i],BuffCharSended,10);
-//		  APP_LOG(TS_OFF, VLEVEL_L,  "Wyslane dane: %s \n\r", BuffCharSended);
-//	  }
+	  uint8_t i;
 
   /* USER CODE END OnTxDone */
 }

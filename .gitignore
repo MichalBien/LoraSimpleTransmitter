@@ -3,5 +3,4 @@
 *.cfg
 *.launch
 *.ld
-*.gitignore
 Debug/
